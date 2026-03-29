@@ -1,56 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/login/login.css">
+:root{
+  --primary:#f97316;
+  --bg:#f6f6f6;
+  --card:#ffffff;
+  --text:#333;
+}
 
-<title>Login/Signup - HabitCore-X</title>
+/* BODY */
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#fff7ed,#ffedd5);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  padding:15px;
+}
 
-</head>
-<body>
+/* CONTAINER */
+.container{
+  width:100%;
+  max-width:360px;
+  background:var(--card);
+  padding:clamp(20px,5vw,30px);
+  border-radius:16px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.1);
+  transition:0.3s;
+}
 
-<div class="container">
+/* LOGO */
+.logo{
+  text-align:center;
+  font-size:clamp(18px,4vw,22px);
+  font-weight:700;
+  margin-bottom:20px;
+}
+.logo span{color:var(--primary);}
 
-  <div class="logo">
-    🔥 Habit<span>Core-X</span>
-  </div>
+/* HEADINGS */
+h2{
+  text-align:center;
+  margin-bottom:15px;
+  color:var(--text);
+  font-size:clamp(18px,4vw,22px);
+}
 
-  <!-- LOGIN -->
-  <div id="loginBox">
-    <h2>Welcome Back</h2>
-    <input id="loginEmail" placeholder="Email">
+/* INPUTS */
+input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:1px solid #ddd;
+  outline:none;
+  font-size:clamp(13px,3.5vw,14px);
+}
 
-    <div class="pass-box">
-      <input id="loginPassword" type="password" placeholder="Password">
-      <span class="toggle-text" onclick="togglePass('loginPassword', this)">Show</span>
-    </div>
+input:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 2px rgba(249,115,22,0.15);
+}
 
-    <button onclick="login()">Login</button>
-    <p class="switch" onclick="showSignup()">Create Account</p>
-  </div>
+/* PASSWORD */
+.pass-box{
+  position:relative;
+}
 
-  <!-- SIGNUP -->
-  <div id="signupBox" class="hidden">
-    <h2>Create Account</h2>
-    <input id="name" placeholder="Name">
-    <input id="age" placeholder="Age">
-    <input id="profession" placeholder="Profession">
-    <input id="mobile" placeholder="Mobile">
-    <input id="email" placeholder="Email">
+.toggle-text{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:12px;
+  color:#f97316;
+  cursor:pointer;
+}
 
-    <div class="pass-box">
-      <input id="password" type="password" placeholder="Password">
-      <span class="toggle-text" onclick="togglePass('password', this)">Show</span>
-    </div>
+/* BUTTON */
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:var(--primary);
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  font-size:clamp(14px,3.5vw,15px);
+  transition:0.2s;
+}
 
-    <button onclick="signup()">Signup</button>
-    <p class="switch" onclick="showLogin()">Back to Login</p>
-  </div>
+button:hover{
+  background:#ea580c;
+}
 
-</div>
+/* SWITCH */
+.switch{
+  text-align:center;
+  margin-top:12px;
+  cursor:pointer;
+  color:var(--primary);
+  font-size:clamp(13px,3.5vw,14px);
+}
 
-<script src="/login/login.js"></script>
+/* HIDDEN */
+.hidden{display:none;}
 
-</body>
-</html>
+/* 📱 MOBILE */
+@media(max-width:480px){
+  body{
+    align-items:flex-start;
+    padding-top:30px;
+  }
+
+  .container{
+    max-width:100%;
+    border-radius:12px;
+  }
+}
+
+/* 📱 TABLET */
+@media(min-width:481px) and (max-width:768px){
+  .container{
+    max-width:420px;
+  }
+}
+
+/* 💻 SMALL LAPTOP */
+@media(min-width:769px) and (max-width:1024px){
+  .container{
+    max-width:450px;
+  }
+}
+
+/* 🖥 DESKTOP */
+@media(min-width:1025px){
+  .container{
+    max-width:380px;
+  }
+}
