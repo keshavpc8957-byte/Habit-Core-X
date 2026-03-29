@@ -626,8 +626,9 @@ function save(){
     habits,
     notes
   };
-  localStorage.setItem("currentUser", email);
-  localStorage.setItem("currentUserName", users[email].name);
+  localStorage.setItem("users", JSON.stringify(users)); // ye bhi add karo
+  localStorage.setItem("currentUser", currentUser);
+  localStorage.setItem("currentUserName", users[currentUser].name);
 }
 
 function logout(){
