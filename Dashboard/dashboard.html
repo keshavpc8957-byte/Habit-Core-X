@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HabitCore-X — Productivity Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/dashboard.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <!-- ── TOPBAR ── -->
+  <header class="topbar">
+    <div class="logo">
+      <div class="logo-icon">🔥</div>
+      <div class="logo-text">Habit<span>Core-X</span></div>
+    </div>
+    <div class="topbar-right">
+      <select class="month-selector" id="monthSel" onchange="changeMonth()">
+        <option value="0">January</option><option value="1">February</option>
+        <option value="2">March</option><option value="3">April</option>
+        <option value="4">May</option><option value="5">June</option>
+        <option value="6">July</option><option value="7">August</option>
+        <option value="8">September</option><option value="9">October</option>
+        <option value="10">November</option><option value="11">December</option>
+      </select>
+      <select class="month-selector" id="yearSel" onchange="changeMonth()">
+        <option value="2024">2024</option>
+        <option value="2025">2025</option>
+        <option value="2026" selected>2026</option>
+        <option value="2027">2027</option>
+      </select>
+      <button class="btn btn-accent" onclick="switchTab('tracker',this)">+ Add Habit</button>
+      
+      <div class="user-box">Welcome 👤 <b id="userName" class="user-name"></b></div>
+      
+      <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+      
+      <div class="dark-toggle" onclick="toggleDark()" id="darkBtn" title="Toggle dark mode">🌙</div>
+    </div>
+  </header>
 
+  <!-- ── TABS ── -->
+  <nav class="tabs">
+    <button class="tab active" onclick="switchTab('dashboard',this)">📊 Dashboard</button>
+    <button class="tab" onclick="switchTab('tracker',this)">✅ Habit Tracker</button>
+    <button class="tab" onclick="switchTab('analytics',this)">📈 Analytics</button>
+    <button class="tab" onclick="switchTab('rankings',this)">🏆 Rankings</button>
+  </nav>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- ═══ DASHBOARD PANEL ═══ -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="marquee-wrap">
+        <div class="marquee-inner" id="marqueeInner"></div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card" style="--card-color:#27ae60">
+          <div class="stat-label">Completed</div>
+          <div class="stat-value" id="statCompleted">0</div>
+          <div class="stat-sub">habit-days this month</div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="statCompletedBar" style="width:0%"></div></div>
+        </div>
+        <div class="stat-card" style="--card-color:#3498db">
+          <div class="stat-label">Total Target</div>
+          <div class="stat-value" id="statTarget">0</div>
+          <div class="stat-sub">possible habit-days</div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="statTargetBar" style="width:100%"></div></div>
+        </div>
+        <div class="stat-card" style="--card-color:var(--accent)">
+          <div class="stat-label">Completion Rate</div>
+          <div class="stat-value" id="statRate">0%</div>
+          <div class="stat-sub" id="statRateSub">Keep going!</div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="statRateBar" style="width:0%"></div></div>
+        </div>
+        <div class="stat-card" style="--card-color:#9b59b6">
+          <div class="stat-label">Best Streak</div>
+          <div class="stat-value" id="statBestStreak">0 🔥</div>
+          <div class="stat-sub" id="statBestHabit">—</div>
+          <div class="stat-bar"><div class="stat-bar-fill" id="statStreakBar" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">Daily Progress <span>checkmarks per day</span></div>
+          <canvas id="lineChart" height="200"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Overall Rate <span id="donutMonth"></span></div>
+          <div class="donut-wrap">
+            <canvas id="donutChart"></canvas>
+            <div class="donut-center">
+              <div class="donut-pct" id="donutPct">0%</div>
+              <div class="donut-lbl">Complete</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px">Weekly Overview</div>
+      <div class="weekly-grid" id="weeklyGrid"></div>
+
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px">Habits at a Glance</div>
+      <div class="mini-habits" id="miniHabitsGrid"></div>
+    </div>
+
+    <!-- ═══ TRACKER PANEL ═══ -->
+    <div class="panel" id="panel-tracker">
+      <div class="table-header">
+        <div class="table-title">📋 Monthly Habit Tracker — <span id="trackerMonthLabel"></span></div>
+        <div class="table-actions">
+          <button class="btn btn-ghost" onclick="markAllToday()">✓ Mark Today All</button>
+          <button class="btn btn-ghost" onclick="clearAll()">✕ Clear All</button>
+        </div>
+      </div>
+
+      <div class="add-habit-form" id="addHabitForm">
+        <div style="font-size:14px;font-weight:600;margin-bottom:14px">Add New Habit</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Habit Name</label>
+            <input class="form-input" id="newHabitName" placeholder="e.g. Drink 2L Water" maxlength="40"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-select" id="newHabitCat">
+              <option value="health">🥗 Health</option>
+              <option value="study">📚 Study</option>
+              <option value="skill">🎸 Skill</option>
+              <option value="mindset">🧘 Mindset</option>
+              <option value="fitness">💪 Fitness</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Emoji</label>
+            <input class="form-input" id="newHabitEmoji" placeholder="💧" maxlength="2" style="text-align:center;font-size:18px"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Goal (days)</label>
+            <input class="form-input" id="newHabitGoal" type="number" min="1" max="31" value="30"/>
+          </div>
+          <button class="btn btn-accent" onclick="addHabit()" style="height:38px">Add</button>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:16px">
+        <div class="table-scroll">
+          <table id="habitTable">
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ANALYTICS PANEL ═══ -->
+    <div class="panel" id="panel-analytics">
+      <div style="font-size:16px;font-weight:700;margin-bottom:16px">📈 Deep Analytics</div>
+
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <div class="chart-title">Weekly Goal vs Achieved <span>grouped bars</span></div>
+          <canvas id="barChart" height="220"></canvas>
+        </div>
+        <div class="analytics-card">
+          <div class="chart-title">Per-Habit Completion <span>horizontal bars</span></div>
+          <canvas id="hbarChart" height="220"></canvas>
+        </div>
+      </div>
+
+      <div style="font-size:14px;font-weight:600;margin-bottom:12px">Category Breakdown</div>
+      <div class="cat-grid" id="catGrid"></div>
+
+      <div style="font-size:14px;font-weight:600;margin:20px 0 12px">Weekly Matrix</div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="matrix-table" id="matrixTable">
+            <thead id="matrixHead"></thead>
+            <tbody id="matrixBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ RANKINGS PANEL ═══ -->
+    <div class="panel" id="panel-rankings">
+      <div style="font-size:16px;font-weight:700;margin-bottom:16px">🏆 Habit Rankings</div>
+      <div class="podium" id="podium"></div>
+      <div class="rank-list" id="rankList"></div>
+    </div>
+
+  </main>
+
+  <!-- ── NOTES MODAL ── -->
+  <div class="notes-overlay" id="notesOverlay">
+    <div class="notes-modal">
+      <div class="notes-title">
+        <span>📝 Notes — <span id="notesDate"></span></span>
+        <span class="notes-close" onclick="closeNotes()">✕</span>
+      </div>
+      <textarea class="notes-textarea" id="notesTextarea" placeholder="What happened today?"></textarea>
+      <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+        <button class="btn btn-ghost" onclick="closeNotes()">Cancel</button>
+        <button class="btn btn-accent" onclick="saveNote()">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Made with ❤️ · Habit Core-X &copy; 2026 · All data stored locally</footer>
+</div>
+
+<script src="/dashboard.js"></script>
+</body>
+</html>
