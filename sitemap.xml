@@ -5,18 +5,24 @@
   <!-- Homepage -->
   <url>
     <loc>https://habitcore-x.netlify.app/</loc>
+    <lastmod>2026-03-29</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- Login/Auth -->
+  <!-- Login Page -->
   <url>
     <loc>https://habitcore-x.netlify.app/login.html</loc>
+    <lastmod>2026-03-29</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <!-- Dashboard -->
   <url>
     <loc>https://habitcore-x.netlify.app/dashboard.html</loc>
+    <lastmod>2026-03-29</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
