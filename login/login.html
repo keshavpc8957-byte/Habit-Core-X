@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/login/login.css">
+
+<title>Login/Signup - HabitCore-X</title>
+
+</head>
+<body>
+
+<div class="container">
+
+  <div class="logo">
+    🔥 Habit<span>Core-X</span>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginBox">
+    <h2>Welcome Back</h2>
+    <input id="loginEmail" placeholder="Email">
+
+    <div class="pass-box">
+      <input id="loginPassword" type="password" placeholder="Password">
+      <span class="toggle-text" onclick="togglePass('loginPassword', this)">Show</span>
+    </div>
+
+    <button onclick="login()">Login</button>
+    <p class="switch" onclick="showSignup()">Create Account</p>
+  </div>
+
+  <!-- SIGNUP -->
+  <div id="signupBox" class="hidden">
+    <h2>Create Account</h2>
+    <input id="name" placeholder="Name">
+    <input id="age" placeholder="Age">
+    <input id="profession" placeholder="Profession">
+    <input id="mobile" placeholder="Mobile">
+    <input id="email" placeholder="Email">
+
+    <div class="pass-box">
+      <input id="password" type="password" placeholder="Password">
+      <span class="toggle-text" onclick="togglePass('password', this)">Show</span>
+    </div>
+
+    <button onclick="signup()">Signup</button>
+    <p class="switch" onclick="showLogin()">Back to Login</p>
+  </div>
+
+</div>
+
+<script src="/login/login.js"></script>
+
+</body>
+</html>
