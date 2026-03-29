@@ -64,5 +64,5 @@ function login(){
   }
   localStorage.setItem("currentUser", email);
   localStorage.setItem("currentUserName", users[email].name);
-  window.location.href = "Dashboard/dashboard.html";
+  window.location.href = "../Dashboard/dashboard.html";
 }
