@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free habit tracker to build better daily habits. Track your routine, improve productivity and stay consistent with HabitCore X.">
+
+<meta name="keywords" content="habit tracker, daily habit tracker, free habit tracker online, build habits, productivity tool">
+<link rel="stylesheet" href="style.css">
+<title>HabitCore X Blog</title>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>🔥 Habit<span>Core-X</span></div>
+
+  <div class="nav">
+    <a href="index.html">Home</a>
+    <a href="login.html" class="login-btn">Login</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>HabitCore X Blog</h1>
+  <p>Build better habits and improve your daily life</p>
+</div>
+
+<!-- BLOG LIST -->
+<div id="blogList" class="grid">
+
+  <div class="card" onclick="openBlog('blog1')">
+    <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773">
+    <div class="card-content">
+      <h3>Why Use a Habit Tracker to Build Better Daily Habits</h3>
+      <p>Simple steps to stay consistent</p>
+    </div>
+  </div>
+
+  <div class="card" onclick="openBlog('blog2')">
+    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71">
+    <div class="card-content">
+      <h3>How to Build Daily Habits</h3>
+      <p>Simple steps to stay consistent</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- BLOG VIEW -->
+<div id="blogView" class="blog-view"></div>
+
+<!-- START SECTION -->
+<div class="start">
+  <h2>Track Your Habits with HabitCore X</h2>
+  <p>Stay consistent and improve your life with our free habit tracker.</p>
+  <a href="login.html" class="btn">Start Now</a>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-container">
+
+    <div>
+      <h3>🔥 HabitCore X</h3>
+      <p>Build better habits and stay consistent daily.</p>
+    </div>
+
+    <div>
+      <h3>Quick Links</h3>
+      <a href="index.html">Home</a><br>
+      <a href="login.html">Login</a>
+    </div>
+
+    <div>
+      <h3>About</h3>
+      <p>HabitCore X helps you track habits and improve productivity.</p>
+      <p>This is a free Habit tracker.</p>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 HabitCore X • All Rights Reserved
+  </div>
+</div>
+
+<!-- BLOG CONTENT (HTML SEO) -->
+<div id="blog1" class="hidden-blog">
+  <h1>Why Use a Habit Tracker to Build Better Daily Habits</h1>
+  <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773">
+
+  <p>A habit tracker helps you stay consistent and improve your daily routine.</p>
+
+  <h2>Start Small</h2>
+  <p>Small habits are easier to maintain and grow over time.</p>
+
+  <h2>Track Progress</h2>
+  <p>Tracking helps you stay disciplined and productive.</p>
+</div>
+
+<div id="blog2" class="hidden-blog">
+  <h1>How to Build Daily Habits</h1>
+  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71">
+
+  <p>Building daily habits improves your productivity and focus.</p>
+
+  <h2>Stay Consistent</h2>
+  <p>Consistency matters more than motivation.</p>
+
+  <h2>Remove Distractions</h2>
+  <p>Focus improves when distractions are reduced.</p>
+</div>
+
+<script>
+function openBlog(id){
+  const content = document.getElementById(id).innerHTML;
+
+  document.getElementById("blogView").style.display="block";
+  document.getElementById("blogList").style.display="none";
+
+  document.getElementById("blogView").innerHTML = `
+    <span class="back" onclick="goBack()">← Back</span>
+    ${content}
+  `;
+}
+
+function goBack(){
+  document.getElementById("blogView").style.display="none";
+  document.getElementById("blogList").style.display="grid";
+}
+</script>
+
+</body>
+</html>
