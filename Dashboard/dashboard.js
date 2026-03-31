@@ -5,7 +5,7 @@ let currentUser = localStorage.getItem("currentUser");
 // ❌ अगर login नहीं किया → वापस भेज दो
 if(!currentUser || !users[currentUser]){
   alert("Please login first");
-  window.location.href = "login.html";
+  window.location.href = "../index.html";
 }
 
 /* ── STATE ── */
@@ -633,7 +633,7 @@ function save(){
 
 function logout(){
   localStorage.removeItem("currentUser");
-  window.location.href = "login.html";
+  window.location.href = "../index.html";
 }
 
 // Initial theme check
