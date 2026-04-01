@@ -1,202 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="google-site-verification" content="sOpJPTAdin5CDLw4bQijR6fuQo4m7PsVQa7EiFcNXoI" />
-<meta name="description" content="Free habit tracker to build better daily habits. Track your routine, improve productivity and stay consistent with HabitCore X.">
+    <meta name="google-site-verification" content="sOpJPTAdin5CDLw4bQijR6fuQo4m7PsVQa7EiFcNXoI" />
+    <meta name="description" content="Free habit tracker to build better daily habits. Track your routine, improve productivity and stay consistent with HabitCore X.">
+    <meta name="keywords" content="habit tracker, daily habit tracker, free habit tracker online, build habits, productivity tool">
 
-<meta name="keywords" content="habit tracker, daily habit tracker, free habit tracker online, build habits, productivity tool">
-<link rel="stylesheet" href="style.css">
-<title>Free Habit Tracker -  HabitCore X Blog</title>
-<link rel="shortcut icon" href="logo.png" type="image/x-icon">
-
+    <title>Habit Core-X || Free Habit Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet">
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
 </head>
 
 <body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="index.html#home">🔥Habit Core-X</a>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/pages/blogs.html" class="nav-link">Blogs</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/pages/tracker.html" class="nav-link">Tracker</a>
+                </li>
+            </ul>
+            <a href="/pages/blogs.html" class="cta-nav">Read Blogs</a>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
 
-<!-- HEADER -->
-<div class="header">
-  <div>🔥 Habit<span>Core-X</span></div>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Welcome to <span class="highlight">Habit Core-X</span></h1>
+                <p class="hero-desc">Habit Core-X is a free online habit tracker designed to help you stay consistent,
+                    improve productivity, and create strong daily routines. Track your habits, monitor progress, and
+                    grow step by step.</p>
+                <a href="pages/blogs.html" class="cta-hero">Explore Blogs</a>
+            </div>
+            <div class="hero-image">
+                <div class="illustration"></div>
+            </div>
+        </div>
+    </section>
 
-  <div class="nav">
-    <a href="index.html">Home</a>
-    <a href="/login/login.html" class="login-btn">Login</a>
-  </div>
-</div>
 
-<!-- HERO -->
-<div class="hero">
-  <h1>Free Habit Tracker Online to Build Better Daily Habits</h1>
-  <p>Build better habits and improve your daily life</p>
-</div>
 
-<!-- BLOG LIST -->
-<div id="blogList" class="grid">
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Habit Core-X</h2>
+                    <p>Habit Core-X is a simple platform designed to help you build better habits and stay consistent
+                        every day. It includes an easy-to-use habit tracker that lets you monitor your progress and stay
+                        on track.
 
-  <div class="card" onclick="openBlog('blog1')">
-    <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773">
-    <div class="card-content">
-      <h3>Why Use a Habit Tracker to Build Better Daily Habits</h3>
-      <p>Simple steps to stay consistent</p>
-    </div>
-  </div>
+                        Whether you're working on productivity, self-growth, or daily routines, Habit Core-X helps you
+                        stay focused and improve step by step.
 
-  <div class="card" onclick="openBlog('blog2')">
-    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71">
-    <div class="card-content">
-      <h3>How to Build Daily Habits</h3>
-      <p>Simple steps to stay consistent</p>
-    </div>
-  </div>
+                        Small habits. Real progress.</p>
 
-</div>
+                    <a href="/pages/blogs.html" class="cta-secondary">Start Reading</a>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&amp;h=400&amp;fit=crop"
+                        alt="About Creator">
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- BLOG VIEW -->
-<div id="blogView" class="blog-view"></div>
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to dive in?</h2>
+            <p>Explore our collection of thoughtfully written articles.</p>
+            <a href="/pages/blogs.html" class="cta-primary">Read Latest Blogs</a>
+        </div>
+    </section>
 
-<!-- START SECTION -->
-<div class="start">
-  <h2>Track Your Habits with HabitCore X</h2>
-  <p>Stay consistent and improve your life with our free habit tracker.</p>
-  <a href="/login/login.html" class="btn">Start Now</a>
-</div>
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Habit Core-X</h3>
+                    <p>Sharing knowledge that matters.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="/pages/blogs.html">Blogs</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="social-links">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="#"><i>📘</i></a>
+                        <a href="#"><i>📷</i></a>
+                        <a href="#"><i>💼</i></a>
+                        <a href="#"><i>🐦</i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&amp;copy; 2026 Habit Core-X. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
-<!-- FOOTER -->
-<div class="footer">
-  <div class="footer-container">
-
-    <div>
-      <h3>🔥 HabitCore X</h3>
-      <p>Build better habits and stay consistent daily.</p>
-    </div>
-
-    <div>
-      <h3>Quick Links</h3>
-      <a href="index.html">Home</a><br>
-      <a href="login/login.html">Login</a>
-    </div>
-
-    <div>
-      <h3>About</h3>
-      <p>HabitCore X helps you track habits and improve productivity.</p>
-      <p>This is a free Habit tracker.</p>
-    </div>
-
-  </div>
-
-  <div class="footer-bottom">
-    © 2026 HabitCore X • All Rights Reserved
-  </div>
-</div>
-
-<!-- BLOG CONTENT (HTML SEO) -->
-<div id="blog1" class="hidden-blog">
-  <h2>Why Use a Habit Tracker to Build Better Daily Habits</h2>
-  <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773">
-<p>
-A habit tracker is one of the most powerful tools to improve your daily routine and stay consistent. 
-With HabitCore-X, you can track your habits online for free and build a better lifestyle step by step.
-</p>
-
-<h2>What is a Habit Tracker?</h2>
-<p>
-A habit tracker is a simple tool that helps you monitor your daily activities like studying, exercising, reading, or meditation. 
-By tracking your habits regularly, you become more aware of your progress and stay motivated to improve.
-</p>
-
-<h2>Start Small and Stay Consistent</h2>
-<p>
-Building habits does not require big changes. Start with small habits and stay consistent every day. 
-HabitCore-X helps you track your daily routine easily so you never lose focus on your goals.
-</p>
-
-<h2>Track Your Daily Progress</h2>
-<p>
-Tracking your progress is key to success. When you see your improvement, you feel motivated to continue. 
-Our free habit tracker online allows you to monitor your daily habits and improve your productivity.
-</p>
-
-<h2>Why Choose HabitCore-X?</h2>
-<ul>
-<li>Simple and user-friendly interface</li>
-<li>Free habit tracker online</li>
-<li>Perfect for students and professionals</li>
-<li>Helps build discipline and consistency</li>
-</ul>
-
-<h2>Build Better Habits Today</h2>
-<p>
-Start using HabitCore-X today and take control of your daily routine. 
-Consistency is the key to success, and a habit tracker makes it easier than ever.
-</p>
-</div>
-
-<div id="blog2" class="hidden-blog">
-  <h2>How to Build Daily Habits</h2>
-  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71">
-
-<p>
-Building daily habits is the key to improving your productivity, focus, and overall lifestyle. 
-With the right strategy and tools like HabitCore-X, you can easily create and maintain good habits every day.
-</p>
-
-<h2>Why Daily Habits Matter</h2>
-<p>
-Daily habits shape your future. Small actions done consistently can lead to big results over time. 
-Whether it is studying, exercising, or reading, building habits helps you stay disciplined and achieve your goals.
-</p>
-
-<h2>Start with Small Habits</h2>
-<p>
-Do not try to change everything at once. Start with small and simple habits that are easy to follow. 
-This increases your chances of staying consistent and avoiding burnout.
-</p>
-
-<h2>Stay Consistent Every Day</h2>
-<p>
-Consistency matters more than motivation. Even if you take small steps daily, you will see long-term results. 
-Use a habit tracker online to track your progress and stay committed.
-</p>
-
-<h2>Remove Distractions</h2>
-<p>
-Distractions can break your focus and slow your progress. Identify what distracts you and reduce it. 
-A clean environment and clear goals can help you stay focused.
-</p>
-
-<h2>Track Your Progress</h2>
-<p>
-Tracking your habits helps you stay motivated. When you see your improvement, you feel encouraged to continue. 
-HabitCore-X provides a simple way to track your daily habits online.
-</p>
-
-<h2>Build Better Habits with HabitCore-X</h2>
-<p>
-Start building better habits today with HabitCore-X. 
-Our free habit tracker online helps you stay consistent, focused, and productive every day.
-</p>
-</div>
-
-<script>
-function openBlog(id){
-  const content = document.getElementById(id).innerHTML;
-
-  document.getElementById("blogView").style.display="block";
-  document.getElementById("blogList").style.display="none";
-
-  document.getElementById("blogView").innerHTML = `
-    <span class="back" onclick="goBack()">← Back</span>
-    ${content}
-  `;
-}
-
-function goBack(){
-  document.getElementById("blogView").style.display="none";
-  document.getElementById("blogList").style.display="grid";
-}
-</script>
-
+    <script src="script.js"></script>
 </body>
+
 </html>
