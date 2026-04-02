@@ -1,133 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login / Signup - Habit Core-X</title>
+  <title>Login / Signup - Habit Core-X</title>
 
-<link rel="stylesheet" href="../style.css">
-<link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="login.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar" id="navbar">
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
     <div class="nav-container">
-        <div class="logo">
-            <a href="../index.html">Habit Core-X</a>
+      <div class="logo">
+        <a href="../index.html">Habit Core-X</a>
+      </div>
+
+      <ul class="nav-menu">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="../pages/blogs.html" class="nav-link">Blogs</a></li>
+        <li><a href="../index.html#about" class="nav-link">About</a></li>
+        <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+        <li><a href="../pages/tracker.html" class="nav-link">Tracker</a></li>
+      </ul>
+
+      <a href="../pages/blogs.html" class="cta-nav">← Back to Blogs</a>
+
+      <div class="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- LOGIN SECTION -->
+  <section class="login-section">
+
+    <div class="login-container">
+
+      <div class="login-logo">
+        🔥 Habit<span>Core-X</span>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="loginBox" class="login-box">
+        <h2>Welcome Back</h2>
+
+        <input id="loginEmail" placeholder="Email">
+
+        <div class="pass-box">
+          <input id="loginPassword" type="password" placeholder="Password">
+          <span class="toggle-text" onclick="togglePass('loginPassword', this)">Show</span>
         </div>
 
-        <ul class="nav-menu">
-            <li><a href="../index.html" class="nav-link">Home</a></li>
-            <li><a href="../pages/blogs.html" class="nav-link">Blogs</a></li>
-            <li><a href="../index.html#about" class="nav-link">About</a></li>
-            <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
-            <li><a href="../pages/tracker.html" class="nav-link">Tracker</a></li>
-        </ul>
+        <button class="login-btn" onclick="login()">Login</button>
 
-        <a href="../pages/blogs.html" class="cta-nav">← Back to Blogs</a>
+        <p class="switch" onclick="showSignup()">Create Account</p>
+      </div>
 
-        <div class="hamburger">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
+      <!-- SIGNUP -->
+      <div id="signupBox" class="login-box hidden">
+        <h2>Create Account</h2>
+
+        <input id="name" placeholder="Name">
+        <input id="age" placeholder="Age">
+        <input id="profession" placeholder="Profession">
+        <input id="mobile" placeholder="Mobile">
+        <input id="email" placeholder="Email">
+
+        <div class="pass-box">
+          <input id="password" type="password" placeholder="Password">
+          <span class="toggle-text" onclick="togglePass('password', this)">Show</span>
         </div>
-    </div>
-</nav>
 
-<!-- LOGIN SECTION -->
-<section class="login-section">
+        <button class="login-btn" onclick="signup()">Signup</button>
 
-<div class="login-container">
+        <p class="switch" onclick="showLogin()">Back to Login</p>
+      </div>
 
-  <div class="login-logo">
-    🔥 Habit<span>Core-X</span>
-  </div>
-
-  <!-- LOGIN -->
-  <div id="loginBox" class="login-box">
-    <h2>Welcome Back</h2>
-
-    <input id="loginEmail" placeholder="Email">
-
-    <div class="pass-box">
-      <input id="loginPassword" type="password" placeholder="Password">
-      <span class="toggle-text" onclick="togglePass('loginPassword', this)">Show</span>
     </div>
 
-    <button class="login-btn" onclick="login()">Login</button>
+  </section>
 
-    <p class="switch" onclick="showSignup()">Create Account</p>
-  </div>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
 
-  <!-- SIGNUP -->
-  <div id="signupBox" class="login-box hidden">
-    <h2>Create Account</h2>
+        <div class="footer-brand">
+          <h3>Habit Core-X</h3>
+          <p>Build better habits, every day.</p>
+        </div>
 
-    <input id="name" placeholder="Name">
-    <input id="age" placeholder="Age">
-    <input id="profession" placeholder="Profession">
-    <input id="mobile" placeholder="Mobile">
-    <input id="email" placeholder="Email">
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../pages/blogs.html">Blogs</a></li>
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../index.html#contact">Contact</a></li>
+          </ul>
+        </div>
 
-    <div class="pass-box">
-      <input id="password" type="password" placeholder="Password">
-      <span class="toggle-text" onclick="togglePass('password', this)">Show</span>
+        <div class="social-links">
+          <h4>Follow Us</h4>
+          <div class="social-icons">
+            <a href="https://www.instagram.com/habitcorex" target="_blank"><i><img src="pngs/instagram.png"
+                  class="social-icon"></i></a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Habit Core-X. All rights reserved.</p>
+      </div>
     </div>
+  </footer>
 
-    <button class="login-btn" onclick="signup()">Signup</button>
-
-    <p class="switch" onclick="showLogin()">Back to Login</p>
-  </div>
-
-</div>
-
-</section>
-
-<!-- FOOTER -->
-<footer class="footer">
-<div class="container">
-<div class="footer-content">
-
-<div class="footer-brand">
-<h3>Habit Core-X</h3>
-<p>Build better habits, every day.</p>
-</div>
-
-<div class="footer-links">
-<h4>Quick Links</h4>
-<ul>
-<li><a href="../index.html">Home</a></li>
-<li><a href="../pages/blogs.html">Blogs</a></li>
-<li><a href="../index.html#about">About</a></li>
-<li><a href="../index.html#contact">Contact</a></li>
-</ul>
-</div>
-
-<div class="social-links">
-<h4>Follow Us</h4>
-<div class="social-icons">
-<a href="#">📘</a>
-<a href="#">📷</a>
-<a href="#">💼</a>
-<a href="#">🐦</a>
-</div>
-</div>
-
-</div>
-
-<div class="footer-bottom">
-<p>&copy; 2026 Habit Core-X. All rights reserved.</p>
-</div>
-</div>
-</footer>
-
-<script src="login.js"></script>
-<script src="../script.js"></script>
+  <script src="login.js"></script>
+  <script src="../script.js"></script>
 
 
 </body>
+
 </html>
