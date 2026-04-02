@@ -491,6 +491,8 @@ body {
 .footer-links h4,
 .social-links h4 {
     margin-bottom: 1rem;
+    text-align: center;
+    width: 100%;
 }
 
 .footer-links ul {
@@ -510,6 +512,8 @@ body {
 .social-icons {
     display: flex;
     gap: 1rem;
+    justify-content: center;   /* 🔥 main fix */
+    width: 100%;
 }
 
 .social-icons a {
@@ -756,3 +760,19 @@ html {
     }
 }
 
+/* social icons */
+.social-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.social-icons a {
+  width: 45px;
+  height: 45px;
+  background: #fbf9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  
+}
