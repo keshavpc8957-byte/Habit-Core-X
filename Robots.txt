@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /login/
+Disallow: /Dashboard/
+
+Allow: /
+
+Sitemap: https://www.habitcore-x.online/sitemap.xml
