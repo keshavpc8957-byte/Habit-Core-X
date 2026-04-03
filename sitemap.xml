@@ -28,6 +28,18 @@
     <priority>0.8</priority>
   </url>
 
+  <url>
+    <loc>https://habitcore-x.online/pages/blog3.html</loc>
+    <lastmod>2026-04-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://habitcore-x.online/pages/blog4.html</loc>
+    <lastmod>2026-04-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Tracker -->
   <url>
     <loc>https://habitcore-x.online/pages/tracker.html</loc>
