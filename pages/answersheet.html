@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasterMCQ | Digital Answer Sheet</title>
+    <!-- jsPDF CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --secondary: #ec4899;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --error: #ef4444;
+            --success: #22c55e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header Section */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #818cf8, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        /* Setup Form Card */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2rem;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-group label {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            font-weight: 500;
+            margin-left: 0.25rem;
+        }
+
+        input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        /* MCQ Sheet Grid */
+        #sheet-container {
+            display: none;
+            /* Hidden until generated */
+            margin-top: 2rem;
+        }
+
+        .mcq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .question-row {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
+        .question-row:hover {
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .question-row.unanswered {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .q-num {
+            font-weight: 600;
+            min-width: 40px;
+            color: var(--text-dim);
+        }
+
+        .options-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .option-item {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .option-item input {
+            display: none;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid var(--glass-border);
+            font-weight: 600;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+
+        .option-item input:checked+.option-label {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+            transform: scale(1.1);
+        }
+
+        /* Buttons */
+        .btn-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-generate {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-generate:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-submit {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-reset {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-reset:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        /* Responsive Tweaks */
+        @media (max-width: 600px) {
+            .mcq-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #334155;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translate(-50%, 100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="app">
+        <header>
+            <h1>MasterMCQ</h1>
+            <p>Generate, Fill, and Export Professional Answer Sheets</p>
+        </header>
+
+        <section class="glass-card" id="setup-view">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="subject">Subject Name</label>
+                    <input type="text" id="subject" placeholder="e.g. Mathematics" maxlength="50">
+                </div>
+                <div class="input-group">
+                    <label for="unit">Unit / Chapter</label>
+                    <input type="text" id="unit" placeholder="e.g. Unit 1: Calculus" maxlength="50">
+                </div>
+                <div class="input-group">
+                    <label for="numQuestions">No. of Questions (Max 100)</label>
+                    <input type="number" id="numQuestions" min="1" max="100" placeholder="e.g. 25">
+                </div>
+            </div>
+            <button class="btn btn-generate" onclick="createNewSheet()">
+                Generate Answer Sheet
+            </button>
+        </section>
+
+        <section id="sheet-container">
+            <div class="glass-card">
+                <div id="active-info"
+                    style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem;">
+                    <!-- Managed by JS -->
+                </div>
+
+                <div id="questions-grid" class="mcq-grid">
+                    <!-- Questions injected here -->
+                </div>
+
+                <div class="btn-container">
+                    <button class="btn btn-reset" onclick="resetApp()">Reset Everything</button>
+                    <button class="btn btn-submit" onclick="submitAndDownload()">Submit & Export PDF</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        // --- State Management ---
+        let appState = {
+            subject: '',
+            unit: '',
+            numQuestions: 0,
+            answers: {},
+            isGenerated: false
+        };
+
+        // --- Initialization ---
+        window.onload = () => {
+            const savedData = localStorage.getItem('master_mcq_data');
+            if (savedData) {
+                appState = JSON.parse(savedData);
+                restoreApp();
+            }
+        };
+
+        function saveState() {
+            localStorage.setItem('master_mcq_data', JSON.stringify(appState));
+        }
+
+        // --- Core Functions ---
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.background = isError ? '#ef4444' : '#334155';
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        function createNewSheet() {
+            const sub = document.getElementById('subject').value.trim();
+            const unit = document.getElementById('unit').value.trim();
+            const num = parseInt(document.getElementById('numQuestions').value);
+
+            if (!sub || !unit || isNaN(num)) {
+                showToast("Please fill in all details", true);
+                return;
+            }
+
+            if (num < 1 || num > 100) {
+                showToast("Question count must be between 1 and 100", true);
+                return;
+            }
+
+            appState.subject = sub;
+            appState.unit = unit;
+            appState.numQuestions = num;
+            appState.answers = {};
+            appState.isGenerated = true;
+
+            renderSheet();
+            saveState();
+
+            // Scroll to sheet
+            document.getElementById('sheet-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function renderSheet() {
+            const container = document.getElementById('sheet-container');
+            const infoBox = document.getElementById('active-info');
+            const grid = document.getElementById('questions-grid');
+
+            container.style.display = 'block';
+
+            infoBox.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <h2 style="font-size: 1.5rem; color: #fff;">${appState.subject}</h2>
+                        <p style="color: var(--text-dim);">${appState.unit}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="background: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">
+                            ${appState.numQuestions} QUESTIONS
+                        </span>
+                    </div>
+                </div>
+            `;
+
+            grid.innerHTML = '';
+            for (let i = 1; i <= appState.numQuestions; i++) {
+                const qRow = document.createElement('div');
+                qRow.className = `question-row q-row-${i}`;
+                qRow.id = `q-row-${i}`;
+
+                const options = ['A', 'B', 'C', 'D'];
+                let optionsHtml = '';
+
+                options.forEach(opt => {
+                    const isChecked = appState.answers[i] === opt ? 'checked' : '';
+                    optionsHtml += `
+                        <label class="option-item">
+                            <input type="radio" name="q${i}" value="${opt}" ${isChecked} onchange="handleAnswer(${i}, '${opt}')">
+                            <span class="option-label">${opt}</span>
+                        </label>
+                    `;
+                });
+
+                qRow.innerHTML = `
+                    <span class="q-num">Q${i}</span>
+                    <div class="options-group">
+                        ${optionsHtml}
+                    </div>
+                `;
+                grid.appendChild(qRow);
+            }
+        }
+
+        function handleAnswer(qNum, value) {
+            appState.answers[qNum] = value;
+            document.getElementById(`q-row-${qNum}`).classList.remove('unanswered');
+            saveState();
+        }
+
+        function restoreApp() {
+            if (appState.isGenerated) {
+                // Pre-fill inputs just in case
+                document.getElementById('subject').value = appState.subject;
+                document.getElementById('unit').value = appState.unit;
+                document.getElementById('numQuestions').value = appState.numQuestions;
+                renderSheet();
+            }
+        }
+
+        function resetApp() {
+            if (confirm("Are you sure? This will clear all answers and current session.")) {
+                localStorage.removeItem('master_mcq_data');
+                appState = { subject: '', unit: '', numQuestions: 0, answers: {}, isGenerated: false };
+                location.reload();
+            }
+        }
+
+        // --- PDF Logic ---
+        function submitAndDownload() {
+            const unanswered = [];
+            for (let i = 1; i <= appState.numQuestions; i++) {
+                if (!appState.answers[i]) {
+                    unanswered.push(i);
+                    document.getElementById(`q-row-${i}`).classList.add('unanswered');
+                }
+            }
+
+            if (unanswered.length > 0) {
+                showToast(`Please answer all questions! (Missing: ${unanswered.length})`, true);
+                const firstMiss = document.getElementById(`q-row-${unanswered[0]}`);
+                firstMiss.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            generatePDF();
+        }
+
+        function generatePDF() {
+            const doc = new jsPDF();
+            const date = new Date().toLocaleDateString();
+
+            // Header Section
+            doc.setFillColor(99, 102, 241); // Primary color
+            doc.rect(0, 0, 210, 40, 'F');
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(24);
+            doc.setFont('helvetica', 'bold');
+            doc.text("MasterMCQ Answer Report", 15, 20);
+
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Generated on: ${date}`, 15, 30);
+
+            // Subject Info
+            doc.setTextColor(40, 40, 40);
+            doc.setFontSize(14);
+            doc.text(`Subject: ${appState.subject}`, 15, 55);
+            doc.text(`Unit: ${appState.unit}`, 15, 62);
+            doc.text(`Total Questions: ${appState.numQuestions}`, 15, 69);
+
+            // Table Construction
+            const tableData = [];
+            const rows = Math.ceil(appState.numQuestions / 4); // 4 columns of Q-A pairs
+
+            for (let i = 0; i < rows; i++) {
+                const rowArr = [];
+                for (let col = 0; col < 4; col++) {
+                    const qIdx = i + (col * rows) + 1;
+                    if (qIdx <= appState.numQuestions) {
+                        rowArr.push(`Q${qIdx}`);
+                        rowArr.push(appState.answers[qIdx]);
+                    } else {
+                        rowArr.push("");
+                        rowArr.push("");
+                    }
+                }
+                tableData.push(rowArr);
+            }
+
+            doc.autoTable({
+                startY: 75,
+                head: [['Q', 'Ans', 'Q', 'Ans', 'Q', 'Ans', 'Q', 'Ans']],
+                body: tableData,
+                theme: 'grid',
+                headStyles: { fillColor: [99, 102, 241], halign: 'center' },
+                styles: { halign: 'center', fontSize: 10 },
+                columnStyles: {
+                    0: { fontStyle: 'bold', fillColor: [240, 240, 240] },
+                    2: { fontStyle: 'bold', fillColor: [240, 240, 240] },
+                    4: { fontStyle: 'bold', fillColor: [240, 240, 240] },
+                    6: { fontStyle: 'bold', fillColor: [240, 240, 240] }
+                }
+            });
+
+            // Footer
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(150, 150, 150);
+                doc.text(`MasterMCQ Digital Sheet - Page ${i} of ${pageCount}`, 105, 290, { align: 'center' });
+            }
+
+            const fileName = `${appState.subject.replace(/\s+/g, '_')}_Answers.pdf`;
+            doc.save(fileName);
+            showToast("PDF Downloaded Successfully!");
+        }
+    </script>
+</body>
+
+</html>
