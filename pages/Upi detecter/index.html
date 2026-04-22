@@ -1,1 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UPI Shield AI — Fraud Detection for Indian Businesses</title>
+  <meta name="description" content="AI-powered UPI fraud detection tool for Indian shopkeepers and small businesses. Analyze UPI IDs, invoices, and payment requests instantly." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Background Orbs -->
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
 
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">🛡️</div>
+        <div class="logo-text">
+          <span class="logo-title">UPI Shield AI</span>
+          <span class="logo-sub">Fraud Detection System</span>
+        </div>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-live">⚡ LIVE</span>
+        <span class="badge badge-secure">🔒 Secure</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">🇮🇳 Made for Indian Dukandaars</div>
+      <h1 class="hero-title">
+        Apna Payment<br/>
+        <span class="gradient-text">Safe Rakho</span>
+      </h1>
+      <p class="hero-sub">
+        UPI ID, Invoice, ya Payment Request — kuch bhi paste karo.<br/>
+        Hum <strong>seconds mein</strong> bata denge: Safe hai ya Fraud!
+      </p>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-chip">🔍 UPI ID Scanner</div>
+        <div class="stat-chip">📄 Invoice Analyser</div>
+        <div class="stat-chip">📱 Phone Validator</div>
+        <div class="stat-chip">⚠️ Pattern Detector</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-container">
+
+    <!-- Input Card -->
+    <div class="card input-card">
+      <div class="card-header">
+        <div class="card-icon">🔎</div>
+        <div>
+          <h2 class="card-title">Yahan Details Daalo</h2>
+          <p class="card-desc">UPI ID, Invoice details, phone number — sab paste karo neeche</p>
+        </div>
+      </div>
+
+      <!-- Quick Examples -->
+      <div class="examples-section">
+        <p class="examples-label">📌 Quick Examples:</p>
+        <div class="examples-grid">
+          <button class="example-btn" id="ex1" onclick="loadExample(1)">
+            <span class="ex-icon">💳</span>
+            <div>
+              <div class="ex-title">UPI ID Check</div>
+              <div class="ex-sub">random123x@ybl</div>
+            </div>
+          </button>
+          <button class="example-btn" id="ex2" onclick="loadExample(2)">
+            <span class="ex-icon">📄</span>
+            <div>
+              <div class="ex-title">Fake Invoice</div>
+              <div class="ex-sub">Reliance Jlo + pressure</div>
+            </div>
+          </button>
+          <button class="example-btn" id="ex3" onclick="loadExample(3)">
+            <span class="ex-icon">🏆</span>
+            <div>
+              <div class="ex-title">Prize Scam</div>
+              <div class="ex-sub">winner2024@paytm</div>
+            </div>
+          </button>
+          <button class="example-btn" id="ex4" onclick="loadExample(4)">
+            <span class="ex-icon">✅</span>
+            <div>
+              <div class="ex-title">Legit Business</div>
+              <div class="ex-sub">rahulshop@okhdfc</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Textarea -->
+      <div class="textarea-wrapper">
+        <textarea
+          id="inputText"
+          class="main-textarea"
+          placeholder="Yahan type karo ya paste karo...
+
+Udaharan (Examples):
+• UPI ID: merchant123@okaxis
+• Company: XYZ Pvt Ltd, GST: 07ABCDE1234F1Z5
+• Amount: ₹50,000
+• Message: Pay immediately or account blocked
+• Phone: 9876543210
+
+Sab kuch ek saath bhi likh sakte ho!"
+          rows="8"
+          oninput="onInputChange()"
+        ></textarea>
+        <div class="textarea-footer">
+          <span class="char-count" id="charCount">0 characters</span>
+          <button class="clear-btn" onclick="clearInput()" id="clearBtn" style="display:none">✕ Clear</button>
+        </div>
+      </div>
+
+      <!-- Analyze Button -->
+      <button class="analyze-btn" id="analyzeBtn" onclick="analyzeInput()" disabled>
+        <span class="btn-icon">🔍</span>
+        <span class="btn-text">Analyse Karo</span>
+        <div class="btn-shimmer"></div>
+      </button>
+
+      <!-- Loader -->
+      <div class="loader-section" id="loaderSection" style="display:none">
+        <div class="loader-ring"></div>
+        <p class="loader-text">Analysing... Ek second ruko 🔍</p>
+        <div class="loader-steps">
+          <div class="step-item" id="step1">✓ UPI ID Format Check</div>
+          <div class="step-item" id="step2">✓ Invoice Analysis</div>
+          <div class="step-item" id="step3">✓ Phone Validation</div>
+          <div class="step-item" id="step4">✓ Behavioral Patterns</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result Card -->
+    <div class="card result-card" id="resultCard" style="display:none">
+      <!-- Risk Banner -->
+      <div class="risk-banner" id="riskBanner">
+        <div class="risk-icon" id="riskIcon"></div>
+        <div class="risk-info">
+          <div class="risk-label" id="riskLabel"></div>
+          <div class="risk-sublabel" id="riskSublabel"></div>
+        </div>
+        <div class="risk-score-circle" id="riskScoreCircle">
+          <svg viewBox="0 0 80 80" class="score-svg">
+            <circle cx="40" cy="40" r="32" class="score-bg-ring"/>
+            <circle cx="40" cy="40" r="32" class="score-ring" id="scoreRing"/>
+          </svg>
+          <div class="score-num" id="scoreNum"></div>
+        </div>
+      </div>
+
+      <!-- Report Content -->
+      <div class="report-body" id="reportBody"></div>
+
+      <!-- Action Buttons -->
+      <div class="result-actions">
+        <button class="action-btn action-copy" onclick="copyReport()">📋 Copy Report</button>
+        <button class="action-btn action-new" onclick="newAnalysis()">🔄 Naya Analysis</button>
+      </div>
+    </div>
+
+    <!-- Helpline Card -->
+    <div class="card helpline-card">
+      <h3 class="helpline-title">🆘 Emergency Helplines</h3>
+      <div class="helpline-grid">
+        <div class="helpline-item">
+          <div class="helpline-num">1930</div>
+          <div class="helpline-desc">Cyber Crime Helpline</div>
+          <div class="helpline-sub">24×7 Available</div>
+        </div>
+        <div class="helpline-item">
+          <div class="helpline-num">14440</div>
+          <div class="helpline-desc">RBI Helpline</div>
+          <div class="helpline-sub">Banking Fraud</div>
+        </div>
+        <div class="helpline-item">
+          <div class="helpline-num">100</div>
+          <div class="helpline-desc">Police</div>
+          <div class="helpline-sub">Immediate Danger</div>
+        </div>
+        <div class="helpline-item">
+          <div class="helpline-num">1800-111-109</div>
+          <div class="helpline-desc">NPCI Helpline</div>
+          <div class="helpline-sub">UPI Issues</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tips Card -->
+    <div class="card tips-card">
+      <h3 class="tips-title">💡 Safety Tips for Dukandaars</h3>
+      <div class="tips-grid">
+        <div class="tip-item">
+          <div class="tip-icon">🔐</div>
+          <div class="tip-text">Kabhi bhi OTP share mat karo — Bank ya UPI app kabhi OTP nahi maangta</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">📱</div>
+          <div class="tip-text">Payment receive karne ke liye PIN nahi daalna hota — sirf bhejne ke liye</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">⏰</div>
+          <div class="tip-text">Jaldi payment ka pressure aaye to — Ruko, verify karo, phir pay karo</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">🏦</div>
+          <div class="tip-text">Official bank website ya app se hi UPI ID verify karo</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">📋</div>
+          <div class="tip-text">GST invoice mein company ka PAN aur state code match karo</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">🤝</div>
+          <div class="tip-text">Unknown vendors ko bade payment se pehle physically verify karo</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>⚡ Powered by <strong>UPI Shield AI</strong> — Protecting Indian Businesses</p>
+    <p class="footer-sub">Educational tool only. Always verify with official channels before making payments.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
