@@ -1,7 +1,11 @@
 User-agent: *
+
+# Allow everything public
+Allow: /
+
+# Block private areas
 Disallow: /login/
 Disallow: /Dashboard/
 
-Allow: /
-
-Sitemap: https://www.habitcore-x.online/sitemap.xml
+# Sitemap
+Sitemap: https://habitcore-x.online/sitemap.xml
