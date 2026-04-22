@@ -1,1 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGenPro | Section-Wise Site Builder</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <div class="brand">
+                    <a href="index.html" style="text-decoration:none; color:inherit;"><h1>WebGen<span>Free</span></h1></a>
+                    <a href="webHome.html" class="back-home"><i class="fas fa-arrow-left"></i> Home</a>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--muted); font-weight: 600;">
+                    Free Website Builder
+                </div>
+            </header>
 
+            <div class="editing-panels">
+                <!-- Header Section -->
+                <div class="panel-item">
+                    <button type="button" class="panel-trigger">Header & Style <i class="fas fa-chevron-down"></i></button>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <label>Logo</label>
+                            <input type="file" id="logo-upload" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label>Color Theme</label>
+                            <div class="theme-options">
+                                <label class="theme-option"><input type="radio" name="theme" value="modern-blue" checked><span style="background:#2563eb"></span></label>
+                                <label class="theme-option"><input type="radio" name="theme" value="forest-green"><span style="background:#059669"></span></label>
+                                <label class="theme-option"><input type="radio" name="theme" value="royal-purple"><span style="background:#7c3aed"></span></label>
+                                <label class="theme-option"><input type="radio" name="theme" value="midnight-dark"><span style="background:#1e293b"></span></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Font</label>
+                            <select id="font-family">
+                                <option value="'Outfit', sans-serif">Outfit (Modern)</option>
+                                <option value="'Inter', sans-serif">Inter (Clean)</option>
+                                <option value="'Poppins', sans-serif">Poppins (Playful)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Section -->
+                <div class="panel-item">
+                    <button type="button" class="panel-trigger">Hero Section <i class="fas fa-chevron-down"></i></button>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <label>Business Name</label>
+                            <input type="text" id="input-name" placeholder="Acme Inc">
+                        </div>
+                        <div class="form-group">
+                            <label>Tagline</label>
+                            <textarea id="input-tagline" placeholder="Innovation at its best"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Button Text</label>
+                            <input type="text" id="input-btn-text" value="Contact Us">
+                        </div>
+                        <div class="form-group">
+                            <label>Hero Background</label>
+                            <input type="file" id="hero-bg-upload" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About Section -->
+                <div class="panel-item">
+                    <button type="button" class="panel-trigger">About Us <i class="fas fa-chevron-down"></i></button>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" id="input-about-title" value="About Us">
+                        </div>
+                        <div class="form-group">
+                            <label>Content</label>
+                            <textarea id="input-about-content" placeholder="Tell your story..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services Section -->
+                <div class="panel-item">
+                    <button type="button" class="panel-trigger">Services <i class="fas fa-chevron-down"></i></button>
+                    <div class="panel-content">
+                        <div id="services-list-admin"></div>
+                        <button type="button" id="add-service-btn" class="btn outline small"><i class="fas fa-plus"></i> Add Service</button>
+                    </div>
+                </div>
+
+                <!-- Gallery Section (Pro) -->
+                <div class="panel-item">
+                    <button type="button" class="panel-trigger">Gallery <i class="fas fa-chevron-down"></i></button>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <label>Upload Images</label>
+                            <input type="file" id="gallery-upload" accept="image/*" multiple>
+                        </div>
+                        <div id="gallery-thumbs" class="thumb-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Contact Section -->
+                <div class="panel-item">
+                    <button type="button" class="panel-trigger">Contact Details <i class="fas fa-chevron-down"></i></button>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="input-phone" placeholder="+91 ...">
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp</label>
+                            <input type="tel" id="input-whatsapp" placeholder="91...">
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <textarea id="input-address" placeholder="Store Address..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Section -->
+                <div class="panel-item">
+                    <button type="button" class="panel-trigger">Footer <i class="fas fa-chevron-down"></i></button>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <label>Copyright Text</label>
+                            <input type="text" id="input-copyright" value="All rights reserved.">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="sidebar-footer">
+                <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 12px; text-align: center; font-weight: 600;">
+                    Your website is ready for download.
+                </div>
+                <button type="button" id="download-trigger" class="btn primary full">
+                    <i class="fas fa-cloud-download-alt"></i> Download Your Website
+                </button>
+            </footer>
+        </aside>
+
+        <main class="preview-area">
+            <div class="preview-header">
+                <div class="browser-controls">
+                    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                </div>
+                <div class="preview-mode-switch">
+                    <button id="view-desktop" class="active"><i class="fas fa-desktop"></i></button>
+                    <button id="view-mobile"><i class="fas fa-mobile-alt"></i></button>
+                </div>
+                <div class="preview-status">Real-time Preview</div>
+            </div>
+            <div id="frame-container">
+                <iframe id="preview-frame" src="about:blank"></iframe>
+            </div>
+        </main>
+    </div>
+
+    <!-- Payload container -->
+    <div id="download-modal" class="modal">
+        <div class="modal-content">
+            <h3>Generating your site...</h3>
+            <p>Please do not close this window.</p>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
