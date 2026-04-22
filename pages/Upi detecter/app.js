@@ -421,29 +421,200 @@ function analyzeUpiId(upiId) {
   const bankLower = (bank || '').toLowerCase();
   const localLower = (local || '').toLowerCase();
 
-  // Valid bank handles
+  // ── COMPREHENSIVE UPI BANK HANDLES ──────────────────────
+  // Google Pay / BHIM "ok*" bank handles
   const validBanks = [
-    'okaxis', 'okhdfcbank', 'okicici', 'oksbi', 'ybl', 'ibl',
-    'paytm', 'upi', 'apl', 'okbizaxis', 'oksbibank', 'axl',
-    'rajgovhdfcbank', 'waaxis', 'wahdfcbank', 'waicici', 'wasbi',
-    'timecosmos', 'jupiteraxis', 'icici', 'hdfcbank', 'sbi',
-    'allbank', 'pnb', 'kotak', 'indus', 'aubank', 'barodampay',
-    'centralbank', 'dbs', 'equitas', 'fbl', 'federal', 'idbi',
-    'idfcfirst', 'indusind', 'kbl', 'kvb', 'lvb', 'mahb',
-    'rbl', 'scb', 'sib', 'tjsb', 'ucbi', 'united', 'vijaya'
+    // ── Google Pay / BHIM "ok*" handles ──
+    'oksbi',          // SBI (State Bank of India)
+    'okhdfcbank',     // HDFC Bank
+    'okaxis',         // Axis Bank
+    'okicici',        // ICICI Bank
+    'okyesbank',      // Yes Bank
+    'okpnb',          // Punjab National Bank
+    'okunionbank',    // Union Bank of India
+    'okbob',          // Bank of Baroda
+    'okcanara',       // Canara Bank
+    'okindus',        // IndusInd Bank
+    'okkotak',        // Kotak Mahindra Bank
+    'okbizaxis',      // Axis Bank (Business)
+    'oksbibank',      // SBI (alternate)
+    'okfederal',      // Federal Bank
+    'okrbl',          // RBL Bank
+    'okidbi',         // IDBI Bank
+    'okiob',          // Indian Overseas Bank
+    'okallahabad',    // Allahabad Bank
+    'okandhra',       // Andhra Bank
+    'okcorpbank',     // Corporation Bank
+    'okdena',         // Dena Bank
+    'oksynd',         // Syndicate Bank
+    'okvijaya',       // Vijaya Bank
+    'okboi',          // Bank of India
+
+    // ── PhonePe handles ──
+    'ybl',            // PhonePe (Yes Bank backend)
+    'ibl',            // PhonePe (ICICI backend — older IDs)
+    'axl',            // PhonePe (Axis Bank backend)
+    'wahdfcbank',     // WhatsApp Pay (HDFC)
+    'waaxis',         // WhatsApp Pay (Axis)
+    'waicici',        // WhatsApp Pay (ICICI)
+    'wasbi',          // WhatsApp Pay (SBI)
+
+    // ── Amazon Pay ──
+    'apl',            // Amazon Pay (Yes Bank / Axis backend)
+    'amazon',         // Amazon Pay (alternate)
+
+    // ── Paytm handles ──
+    'paytm',          // Paytm (default)
+    'pthdfc',         // Paytm × HDFC Bank
+    'ptaxis',         // Paytm × Axis Bank
+    'ptyes',          // Paytm × Yes Bank
+    'ptsbi',          // Paytm × SBI
+    'ptkotak',        // Paytm × Kotak
+    'ptidfc',         // Paytm × IDFC Bank
+
+    // ── BHIM & Direct Bank UPI handles ──
+    'upi',            // BHIM / generic
+    'icici',          // ICICI Bank direct
+    'hdfcbank',       // HDFC Bank direct
+    'sbi',            // SBI direct
+    'pnb',            // PNB direct
+    'kotak',          // Kotak direct
+    'indus',          // IndusInd Bank direct
+    'aubank',         // AU Small Finance Bank
+    'barodampay',     // Bank of Baroda Pay
+    'cbin',           // Central Bank of India
+    'centralbank',    // Central Bank of India
+    'dbs',            // DBS Bank
+    'equitas',        // Equitas Small Finance Bank
+    'fbl',            // Federal Bank (alternate)
+    'federal',        // Federal Bank
+    'idbi',           // IDBI Bank
+    'idfcfirst',      // IDFC First Bank
+    'idfc',           // IDFC First (alternate)
+    'indusind',       // IndusInd (alternate)
+    'kbl',            // Karnataka Bank
+    'kvb',            // Karur Vysya Bank
+    'lvb',            // Lakshmi Vilas Bank
+    'mahb',           // Bank of Maharashtra
+    'obc',            // Oriental Bank of Commerce
+    'rbl',            // RBL Bank
+    'scb',            // Standard Chartered Bank
+    'sib',            // South Indian Bank
+    'tjsb',           // TJSB Sahakari Bank
+    'ucbi',           // UCO Bank (alternate)
+    'uco',            // UCO Bank
+    'united',         // United Bank of India
+    'vijaya',         // Vijaya Bank
+    'allbank',        // Allahabad Bank
+    'cnrb',           // Canara Bank direct
+    'ucobank',        // UCO Bank direct
+    'boi',            // Bank of India
+    'iob',            // Indian Overseas Bank
+    'jkb',            // J&K Bank
+    'karurvysyabank', // Karur Vysya Bank (full)
+    'karnatakabank',  // Karnataka Bank (full)
+    'nsdl',           // NSDL Payments Bank
+    'airtel',         // Airtel Payments Bank
+    'airtelmoney',    // Airtel Payments Bank (alternate)
+    'jupiteraxis',    // Jupiter (Axis Bank backend)
+    'rajgovhdfcbank', // Raj Govt (HDFC backend)
+    'timecosmos',     // Timecosmos (ICICI backend)
+    'yapl',           // Yes Bank — apps
+    'abfspay',        // Aditya Birla Finance
+    'hsbc',           // HSBC
+    'citibank',       // Citibank
+    'yesbank',        // Yes Bank (direct app)
+    'axisbank',       // Axis Bank (direct)
+    'sbiepay',        // SBI ePay
+    'imobile',        // iMobile (ICICI)
+    'ikwik',          // iKwik
+    'freecharge',     // FreeCharge (Axis backend)
+    'finobank',       // Fino Payments Bank
+    'postpaid',       // India Post Payments Bank
+    'ippb',           // India Post Payments Bank
+    'juspay',         // JusPay
+    'gpay',           // Google Pay (alternate)
+    'slice',          // Slice (SBM Bank)
+    'tapicici',       // Tata Pay (ICICI backend)
+    'tapay',          // Tata Pay
+    'credpay',        // CRED Pay
+    'cred',           // CRED
+    'zoicici',        // ZO (ICICI)
+    'zoaxis',         // ZO (Axis)
+    'razorpay',       // Razorpay
+    'cashfree',       // Cashfree
+    'bharatpe',       // BharatPe
+    'mobikwik',       // MobiKwik
+    'lazyaxisbank',   // LazyPay (Axis)
+    'idbibank',       // IDBI Bank
+    'dlb',            // Dhanlaxmi Bank
+    'usfbsecure',     // Utkarsh Small Finance Bank
+    'yesbankltd',     // Yes Bank Ltd
+    'pingpay',        // Samsung Pay (Axis backend)
+    'yesg',           // Yes Bank (BHIM YES Pay)
+    'abhibank',       // Abhyudaya Bank
+    'saraswatbank',   // Saraswat Bank
+    'shivalikbank',   // Shivalik Bank
+    'ujjivanbank',    // Ujjivan Small Finance Bank
   ];
 
   // Misspelled bank check
   const misspelledBanks = {
+    // HDFC variants
     'hdffcbank': 'hdfcbank',
-    'sbi1': 'sbi',
-    'okicic': 'okicici',
     'okhdfcc': 'okhdfcbank',
+    'okhdfc': 'okhdfcbank',
+    'okhdfcban': 'okhdfcbank',
+    // SBI variants
+    'sbi1': 'sbi',
+    'oksbb': 'oksbi',
+    'oksbii': 'oksbi',
+    // ICICI variants
+    'okicic': 'okicici',
+    'okicicii': 'okicici',
+    'okicic1': 'okicici',
+    // PhonePe / YBL variants
+    'yb1': 'ybl',
+    'yb1l': 'ybl',
+    'yb|': 'ybl',
+    // PhonePe / IBL variants
+    'ibi': 'ibl',
+    'ib1': 'ibl',
+    // Paytm variants
     'payytm': 'paytm',
     'paatm': 'paytm',
-    'yb1': 'ybl',
-    'ibi': 'ibl',
-    'oksbb': 'oksbi',
+    'payt m': 'paytm',
+    'paytm1': 'paytm',
+    'pthdfc1': 'pthdfc',
+    'ptaxix': 'ptaxis',
+    'ptyess': 'ptyes',
+    // Amazon Pay variants
+    'ap1': 'apl',
+    'apI': 'apl',
+    // Yes Bank variants
+    'okyeesbank': 'okyesbank',
+    'okyesban': 'okyesbank',
+    'okybank': 'okyesbank',
+    // PNB variants
+    'okpnbb': 'okpnb',
+    'okpbn': 'okpnb',
+    // Union Bank variants
+    'okunion': 'okunionbank',
+    'okunionban': 'okunionbank',
+    // BOB variants
+    'okbobb': 'okbob',
+    'okb0b': 'okbob',
+    // Canara variants
+    'okcanaara': 'okcanara',
+    'okcanra': 'okcanara',
+    // IndusInd variants
+    'okindu': 'okindus',
+    'okinduss': 'okindus',
+    // Axis variants
+    'okaxix': 'okaxis',
+    'okaxiss': 'okaxis',
+    'ax1': 'axl',
+    'ax|': 'axl',
   };
 
   if (misspelledBanks[bankLower]) {
