@@ -23,6 +23,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            width: 100%;
         }
 
         h1 {
@@ -39,6 +40,7 @@
             justify-content: center;
             margin-bottom: 2rem;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .toggle button {
@@ -48,6 +50,7 @@
             cursor: pointer;
             background: #ddd;
             font-weight: 500;
+            transition: 0.2s;
         }
 
         .toggle button.active {
@@ -55,6 +58,7 @@
             color: white;
         }
 
+        /* Grid */
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -68,7 +72,6 @@
             padding: 2rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             transition: 0.3s;
-            position: relative;
         }
 
         .tool-card:hover {
@@ -98,6 +101,72 @@
 
         .hidden {
             display: none;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+
+            body {
+                padding: 1.5rem 0.5rem;
+            }
+
+            .tools-grid {
+                gap: 1.5rem;
+                padding: 0;
+            }
+
+            .tool-card {
+                padding: 1.5rem;
+            }
+
+            .tool-name {
+                font-size: 1.3rem;
+            }
+
+            .tool-description {
+                font-size: 0.9rem;
+            }
+
+            .toggle {
+                gap: 0.5rem;
+            }
+
+            .toggle button {
+                flex: 1;
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+
+        /* Small Mobile */
+        @media (max-width: 480px) {
+
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            .tool-card {
+                padding: 1.2rem;
+                border-radius: 12px;
+            }
+
+            .tool-button {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
         }
     </style>
 </head>
