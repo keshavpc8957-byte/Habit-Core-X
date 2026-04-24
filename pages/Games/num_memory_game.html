@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>NumFlip – 2 Player Number Sequence Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    :root {
+      --bg: #06060f;
+      --card: #0f0f1f;
+      --accent1: #e879f9;
+      --accent2: #34d399;
+      --p1: #fb923c;
+      --p2: #818cf8;
+      --text: #f8f8ff;
+      --muted: #6b7280;
+      --radius: 14px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADINGS ── */
+    h1 {
+      font-size: clamp(1.5rem, 5vw, 2.4rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      text-align: center;
+      letter-spacing: -.02em;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      font-size: clamp(.8rem, 2.5vw, .95rem)
+    }
+
+    /* ── SETUP ── */
+    #setup-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.2rem;
+      gap: 1rem;
+    }
+
+    .setup-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: clamp(1.2rem, 4vw, 2rem);
+      width: 100%;
+      max-width: 440px;
+      border: 1px solid rgba(232, 121, 249, .2);
+    }
+
+    .setup-card h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--accent2)
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+      margin-bottom: .9rem
+    }
+
+    label {
+      font-size: .82rem;
+      color: var(--muted)
+    }
+
+    input[type=text],
+    select {
+      background: #06060f;
+      border: 1px solid rgba(255, 255, 255, .1);
+      color: var(--text);
+      padding: .65rem .9rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      width: 100%;
+      outline: none;
+      transition: border .2s;
+    }
+
+    input[type=text]:focus,
+    select:focus {
+      border-color: var(--accent1)
+    }
+
+    input[type=range] {
+      width: 100%;
+      accent-color: var(--accent1);
+      cursor: pointer
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem
+    }
+
+    .range-val {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--accent1);
+      min-width: 2.5rem;
+      text-align: right
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      border-radius: 50px;
+      border: none;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s;
+      touch-action: manipulation;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      color: #fff;
+      width: 100%;
+      padding: .85rem 2rem;
+      font-size: 1.05rem;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(232, 121, 249, .45)
+    }
+
+    .btn-primary:active {
+      transform: translateY(0)
+    }
+
+    .btn-sm {
+      padding: .5rem 1.1rem;
+      font-size: .85rem
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, .07);
+      color: var(--text)
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, .12)
+    }
+
+    .btn-ghost:active {
+      background: rgba(255, 255, 255, .2)
+    }
+
+    /* ── GAME SCREEN ── */
+    #game-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: clamp(.6rem, 2vw, 1.2rem);
+      gap: .7rem;
+      min-height: 100vh;
+    }
+
+    /* ── HUD ── */
+    .hud {
+      display: flex;
+      gap: .6rem;
+      width: 100%;
+      max-width: 860px;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    .hud-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: clamp(.5rem, 2vw, .8rem) clamp(.6rem, 2vw, 1.2rem);
+      flex: 1;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, .06);
+      transition: border .3s, box-shadow .3s;
+      min-width: 0;
+    }
+
+    .hud-card.active-p1 {
+      border-color: var(--p1);
+      box-shadow: 0 0 18px rgba(251, 146, 60, .3)
+    }
+
+    .hud-card.active-p2 {
+      border-color: var(--p2);
+      box-shadow: 0 0 18px rgba(129, 140, 248, .3)
+    }
+
+    .hud-label {
+      font-size: clamp(.62rem, 1.8vw, .72rem);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--muted);
+      margin-bottom: .25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hud-val {
+      font-size: clamp(1.1rem, 4vw, 1.6rem);
+      font-weight: 700
+    }
+
+    .hud-val.p1 {
+      color: var(--p1)
+    }
+
+    .hud-val.p2 {
+      color: var(--p2)
+    }
+
+    .hud-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .3rem;
+      flex-shrink: 0;
+    }
+
+    .cur-player-badge {
+      padding: .3rem .8rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: clamp(.75rem, 2.5vw, .9rem);
+      white-space: nowrap;
+    }
+
+    .cur-player-badge.p1 {
+      background: rgba(251, 146, 60, .15);
+      color: var(--p1);
+      border: 1px solid var(--p1)
+    }
+
+    .cur-player-badge.p2 {
+      background: rgba(129, 140, 248, .15);
+      color: var(--p2);
+      border: 1px solid var(--p2)
+    }
+
+    /* ── SEQ BAR ── */
+    .seq-bar {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: .7rem 1rem;
+      width: 100%;
+      max-width: 860px;
+      border: 1px solid rgba(255, 255, 255, .06);
+    }
+
+    .seq-label {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--muted);
+      margin-bottom: .35rem
+    }
+
+    .seq-nums {
+      display: flex;
+      gap: .35rem;
+      flex-wrap: wrap
+    }
+
+    .seq-num {
+      background: rgba(232, 121, 249, .15);
+      border: 1px solid rgba(232, 121, 249, .35);
+      border-radius: 6px;
+      padding: .2rem .55rem;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--accent1);
+    }
+
+    .seq-next {
+      background: rgba(52, 211, 153, .12);
+      border: 1px solid rgba(52, 211, 153, .4);
+      color: var(--accent2);
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .45
+      }
+    }
+
+    /* ── STATUS ── */
+    #status-msg {
+      font-size: clamp(.82rem, 2.5vw, .95rem);
+      color: var(--muted);
+      min-height: 1.3rem;
+      text-align: center;
+      padding: 0 .5rem;
+      line-height: 1.4;
+    }
+
+    /* ── GRID WRAP ── */
+    #grid-wrap {
+      width: 100%;
+      max-width: 860px;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start
+    }
+
+    #grid {
+      display: grid;
+      gap: clamp(3px, 1vw, 7px);
+      width: 100%
+    }
+
+    /* ── CELL ── */
+    .cell {
+      aspect-ratio: 1;
+      perspective: 700px;
+      cursor: pointer;
+      touch-action: manipulation
+    }
+
+    .cell-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform .42s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .cell.flipped .cell-inner {
+      transform: rotateY(180deg)
+    }
+
+    .cell-face {
+      position: absolute;
+      inset: 0;
+      border-radius: clamp(4px, 1.5vw, 10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      user-select: none;
+    }
+
+    /* Back face */
+    .cell-back {
+      background: linear-gradient(135deg, #0f0f1f, #181830);
+      border: 1px solid rgba(255, 255, 255, .07);
+    }
+
+    .cell-back::after {
+      content: '?';
+      font-size: var(--cell-font, clamp(1rem,3.5vw,1.8rem));
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    /* Front face – number fills cell */
+    .cell-front {
+      background: linear-gradient(135deg, #181830, #0f0f1f);
+      border: 1px solid rgba(232, 121, 249, .3);
+      transform: rotateY(180deg);
+      font-size: var(--cell-font, clamp(1rem,3.8vw,2rem));
+      color: var(--text);
+    }
+
+    .cell.correct-p1 .cell-front {
+      background: linear-gradient(135deg, rgba(251, 146, 60, .3), rgba(251, 146, 60, .1));
+      border-color: var(--p1);
+      color: var(--p1);
+    }
+
+    .cell.correct-p2 .cell-front {
+      background: linear-gradient(135deg, rgba(129, 140, 248, .3), rgba(129, 140, 248, .1));
+      border-color: var(--p2);
+      color: var(--p2);
+    }
+
+    /* Interactions */
+    .cell.wrong {
+      animation: shake .35s ease
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translateX(0)
+      }
+
+      25% {
+        transform: translateX(-7px)
+      }
+
+      50% {
+        transform: translateX(7px)
+      }
+
+      75% {
+        transform: translateX(-4px)
+      }
+
+      100% {
+        transform: translateX(0)
+      }
+    }
+
+    @media(hover:hover) {
+      .cell:hover:not(.correct-p1):not(.correct-p2) .cell-back {
+        background: linear-gradient(135deg, #181830, #201f40);
+        border-color: rgba(232, 121, 249, .4);
+      }
+    }
+
+    /* ── TURN BANNER ── */
+    .turn-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      text-align: center;
+      font-size: clamp(1rem, 4vw, 1.3rem);
+      font-weight: 700;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+
+    .turn-banner.show {
+      opacity: 1
+    }
+
+    .turn-banner.p1 {
+      background: linear-gradient(90deg, rgba(251, 146, 60, .9), rgba(251, 146, 60, .1))
+    }
+
+    .turn-banner.p2 {
+      background: linear-gradient(90deg, rgba(129, 140, 248, .9), rgba(129, 140, 248, .1))
+    }
+
+    /* ── WIN SCREEN ── */
+    #win-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 6, 15, .95);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1.3rem;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    #win-screen h2 {
+      font-size: clamp(1.5rem, 6vw, 2.5rem);
+      font-weight: 900
+    }
+
+    .win-scores {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center
+    }
+
+    .win-score-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: clamp(1rem, 4vw, 1.5rem) clamp(1.2rem, 5vw, 2.5rem);
+      border: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .win-score-card.winner {
+      border: 2px solid gold;
+      box-shadow: 0 0 28px rgba(255, 215, 0, .35)
+    }
+
+    .win-score-num {
+      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-weight: 900
+    }
+
+    .controls {
+      display: flex;
+      gap: .7rem;
+      flex-wrap: wrap;
+      justify-content: center
+    }
+
+    /* ── RESPONSIVE BREAKPOINTS ── */
+    @media(max-width:480px) {
+      .hud {
+        gap: .4rem
+      }
+
+      .seq-bar {
+        padding: .5rem .7rem
+      }
+
+      #grid {
+        gap: 3px
+      }
+    }
+
+    @media(min-width:1200px) {
+      #game-screen {
+        padding: 1.5rem 2rem
+      }
+
+      #grid-wrap {
+        max-width: 960px
+      }
+
+      #grid {
+        max-width: 960px
+      }
+
+      .hud {
+        max-width: 960px
+      }
+
+      .seq-bar {
+        max-width: 960px
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SETUP -->
+  <div id="setup-screen">
+    <h1>NumFlip</h1>
+    <p class="subtitle">Number Sequence Memory Game</p>
+    <div class="setup-card">
+      <h2>⚙️ Game Settings</h2>
+      <div class="field">
+        <label>N – Total Numbers (Grid Size)</label>
+        <div class="range-row">
+          <input type="range" id="n-range" min="4" max="100" value="16">
+          <span class="range-val" id="n-display">16</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Player 1 Name</label>
+        <input type="text" id="p1-name" value="Player 1" maxlength="20">
+      </div>
+      <div class="field">
+        <label>Player 2 Name</label>
+        <input type="text" id="p2-name" value="Player 2" maxlength="20">
+      </div>
+      <div class="field">
+        <label>Game Mode</label>
+        <select id="game-mode" onchange="toggleBotFields()">
+          <option value="pvp">👥 Player vs Player</option>
+          <option value="pvb">🤖 Player vs Bot</option>
+        </select>
+      </div>
+      <div class="field" id="bot-diff-field" style="display:none">
+        <label>Bot Memory Level</label>
+        <select id="bot-difficulty">
+          <option value="easy">🟢 Easy – Bot forgets a lot</option>
+          <option value="medium" selected>🟡 Medium – Bot remembers some</option>
+          <option value="hard">🔴 Hard – Bot has near-perfect memory</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary" onclick="startGame()">🚀 Start Game</button>
+    </div>
+  </div>
+
+  <!-- TURN BANNER -->
+  <div class="turn-banner" id="turn-banner"></div>
+
+  <!-- GAME -->
+  <div id="game-screen">
+    <h1>NumFlip</h1>
+    <div class="hud">
+      <div class="hud-card" id="hud-p1">
+        <div class="hud-label" id="hud-p1-name">Player 1</div>
+        <div class="hud-val p1" id="hud-p1-score">0</div>
+        <div class="hud-label">Score</div>
+      </div>
+      <div class="hud-center">
+        <div class="cur-player-badge p1" id="cur-badge">P1's Turn</div>
+      </div>
+      <div class="hud-card" id="hud-p2">
+        <div class="hud-label" id="hud-p2-name">Player 2</div>
+        <div class="hud-val p2" id="hud-p2-score">0</div>
+        <div class="hud-label">Score</div>
+      </div>
+    </div>
+    <div class="seq-bar">
+      <div class="seq-label">🔢 Current Sequence</div>
+      <div class="seq-nums" id="seq-display"></div>
+    </div>
+    <div id="status-msg">🔍 Find number <strong>1</strong> to begin!</div>
+    <div id="grid-wrap">
+      <div id="grid"></div>
+    </div>
+    <div class="controls" style="margin-top:.5rem;margin-bottom:.8rem">
+      <button class="btn btn-ghost btn-sm" onclick="showSetup()">⚙️ Settings</button>
+      <button class="btn btn-ghost btn-sm" onclick="restartGame()">🔄 Restart</button>
+    </div>
+  </div>
+
+  <!-- WIN -->
+  <div id="win-screen">
+    <h1>🏆 Game Over!</h1>
+    <h2 id="win-title"></h2>
+    <div class="win-scores" id="win-scores"></div>
+    <div class="controls">
+      <button class="btn btn-primary" onclick="restartGame()">🔄 Play Again</button>
+      <button class="btn btn-ghost btn-sm" onclick="showSetup()">⚙️ New Settings</button>
+    </div>
+  </div>
+
+  <script>
+    // ─── State ───────────────────────────────────────────────────────────────────
+    let N, grid, cellEls, currentPlayer, scores, sequences, nextExpected;
+    let gameActive = false;
+    let isBotGame = false, botDifficulty = 'medium', botPlaying = false;
+    let botMemory = {}; // { num: gridIndex }
+
+    // ─── Setup ───────────────────────────────────────────────────────────────────
+    const nRange = document.getElementById('n-range');
+    const nDisplay = document.getElementById('n-display');
+    nRange.addEventListener('input', () => nDisplay.textContent = nRange.value);
+
+    function showSetup() {
+      document.getElementById('setup-screen').style.display = 'flex';
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('win-screen').style.display = 'none';
+      gameActive = false;
+    }
+
+    function startGame() {
+      N = parseInt(nRange.value);
+      isBotGame = document.getElementById('game-mode').value === 'pvb';
+      botDifficulty = document.getElementById('bot-difficulty').value;
+      const p1 = document.getElementById('p1-name').value.trim() || 'Player 1';
+      const p2 = isBotGame ? '🤖 Bot' : (document.getElementById('p2-name').value.trim() || 'Player 2');
+      document.getElementById('hud-p1-name').textContent = p1;
+      document.getElementById('hud-p2-name').textContent = p2;
+      document.getElementById('setup-screen').style.display = 'none';
+      document.getElementById('win-screen').style.display = 'none';
+      document.getElementById('game-screen').style.display = 'flex';
+      initGame();
+    }
+
+    function toggleBotFields() {
+      const pvb = document.getElementById('game-mode').value === 'pvb';
+      document.getElementById('bot-diff-field').style.display = pvb ? 'flex' : 'none';
+      document.getElementById('p2-name').closest('.field').style.display = pvb ? 'none' : 'flex';
+    }
+
+    function restartGame() {
+      document.getElementById('win-screen').style.display = 'none';
+      document.getElementById('game-screen').style.display = 'flex';
+      initGame();
+    }
+
+    // Track current-turn found count for seq display
+    let turnFoundCount = 0;
+
+    // ─── Init ─────────────────────────────────────────────────────────────────────
+    function initGame() {
+      currentPlayer = 0;
+      scores = [0, 0];
+      sequences = [[], []];
+      nextExpected = 1;
+      turnFoundCount = 0;
+      botMemory = {};
+      botPlaying = false;
+      gameActive = true;
+      updateHUD();
+      buildGrid();
+      setStatus('🔍 Find number <strong>1</strong> to begin!');
+      showTurnBanner();
+    }
+
+    function buildGrid() {
+      const gridEl = document.getElementById('grid');
+      gridEl.innerHTML = '';
+
+      // Shuffle 1..N
+      const nums = Array.from({ length: N }, (_, i) => i + 1);
+      for (let i = nums.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [nums[i], nums[j]] = [nums[j], nums[i]];
+      }
+      grid = nums;
+
+      // Responsive columns: more columns for larger N
+      const cols = Math.ceil(Math.sqrt(N));
+      gridEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+      cellEls = [];
+      nums.forEach((num, idx) => {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.num = num;
+        cell.dataset.idx = idx;
+        cell.innerHTML = `<div class="cell-inner"><div class="cell-face cell-back"></div><div class="cell-face cell-front">${num}</div></div>`;
+        cell.addEventListener('click', () => onCellClick(cell, num));
+        gridEl.appendChild(cell);
+        cellEls.push(cell);
+      });
+      updateSeqDisplay();
+      adjustCellFontSize();
+    }
+
+    // ─── Cell Font Size ───────────────────────────────────────────────────────────
+    function adjustCellFontSize() {
+      if (!cellEls || !cellEls.length) return;
+      requestAnimationFrame(() => {
+        const cellWidth = cellEls[0].getBoundingClientRect().width;
+        if (cellWidth === 0) return;
+        // 55% of cell width fills the box nicely
+        const fontSize = Math.max(10, Math.floor(cellWidth * 0.55));
+        document.documentElement.style.setProperty('--cell-font', fontSize + 'px');
+      });
+    }
+    window.addEventListener('resize', adjustCellFontSize);
+
+    // ─── Gameplay ─────────────────────────────────────────────────────────────────
+    function observeCell(num, idx) {
+      // Bot watches and maybe remembers this cell based on difficulty
+      const chance = botDifficulty === 'easy' ? 0.28 : botDifficulty === 'medium' ? 0.62 : 1.0;
+      if (Math.random() < chance) botMemory[num] = idx;
+    }
+
+    function onCellClick(cell, num) {
+      if (!gameActive || botPlaying) return;
+
+      // Already found cell → toggle flip (peek/hide)
+      if (cell.classList.contains('correct-p1') || cell.classList.contains('correct-p2')) {
+        cell.classList.toggle('flipped');
+        return;
+      }
+
+      // Bot observes player's reveal
+      if (isBotGame) observeCell(num, cellEls.indexOf(cell));
+
+      // Reveal cell
+      cell.classList.add('flipped');
+
+      if (num === nextExpected) {
+        // ✅ Correct!
+        const cls = currentPlayer === 0 ? 'correct-p1' : 'correct-p2';
+        cell.classList.add(cls);
+        sequences[currentPlayer].push(num);
+        scores[currentPlayer]++;
+        turnFoundCount++;
+        nextExpected++;
+        updateHUD();
+        updateSeqDisplay();
+        if (nextExpected > N) { endGame('complete'); return; }
+        if (num === 1) {
+          setStatus(`✅ Found 1! Now find <strong>2</strong> to continue.`);
+        } else {
+          setStatus(`✅ Correct! Now find <strong>${nextExpected}</strong>`);
+        }
+        // (cards stay flipped on correct move, all flip on wrong/turn switch)
+      } else {
+        // ❌ Wrong – shake, flip all, switch turn
+        cell.classList.add('wrong');
+        const msg = nextExpected === 1
+          ? `❌ That's not 1! Find <strong>1</strong> first. All boxes flipping back...`
+          : `❌ Wrong! Expected <strong>${nextExpected}</strong>. All boxes flipping back...`;
+        setStatus(msg);
+        setTimeout(() => {
+          cell.classList.remove('wrong');
+          cellEls.forEach(c => c.classList.remove('flipped'));
+          switchTurn();
+        }, 700);
+      }
+    }
+
+    function switchTurn() {
+      // Full visual reset – every turn is a fresh start
+      cellEls.forEach(c => {
+        c.classList.remove('flipped', 'correct-p1', 'correct-p2', 'wrong');
+      });
+      currentPlayer = 1 - currentPlayer;
+      nextExpected = 1;
+      turnFoundCount = 0;
+      updateHUD();
+      updateSeqDisplay();
+      setStatus('🔍 Find number <strong>1</strong> to begin your turn!');
+      showTurnBanner();
+      // If bot's turn, run bot after banner delay
+      if (isBotGame && currentPlayer === 1) {
+        setTimeout(runBotTurn, 1200);
+      }
+    }
+
+    // ─── Bot Logic ────────────────────────────────────────────────────────────────
+    const delay = ms => new Promise(r => setTimeout(r, ms));
+
+    async function runBotTurn() {
+      if (!gameActive) return;
+      botPlaying = true;
+      setStatus('🤖 Bot is thinking...');
+      await delay(900);
+
+      while (gameActive && currentPlayer === 1) {
+        const target = nextExpected;
+
+        if (botMemory[target] !== undefined) {
+          // Bot remembers where this number is!
+          const idx = botMemory[target];
+          const cell = cellEls[idx];
+          cell.classList.add('flipped');
+          setStatus(`🤖 Bot remembers <strong>${target}</strong>! Clicking...`);
+          await delay(650);
+
+          cell.classList.add('correct-p2');
+          sequences[1].push(target);
+          scores[1]++;
+          turnFoundCount++;
+          nextExpected++;
+          updateHUD();
+          updateSeqDisplay();
+          if (nextExpected > N) { botPlaying = false; endGame('complete'); return; }
+          setStatus(`🤖 Bot found <strong>${target}</strong>! Now hunting <strong>${nextExpected}</strong>...`);
+          await delay(750);
+        } else {
+          // Bot doesn't know – pick random unrevealed cell
+          const candidates = cellEls.filter(c =>
+            !c.classList.contains('correct-p1') &&
+            !c.classList.contains('correct-p2') &&
+            !c.classList.contains('flipped')
+          );
+          if (!candidates.length) { botPlaying = false; endGame('complete'); return; }
+
+          const pick = candidates[Math.floor(Math.random() * candidates.length)];
+          const revealedNum = parseInt(pick.dataset.num);
+          // Bot observes this reveal too
+          observeCell(revealedNum, cellEls.indexOf(pick));
+          pick.classList.add('flipped');
+          setStatus('🤖 Bot is guessing...');
+          await delay(750);
+
+          if (revealedNum === target) {
+            // Lucky correct!
+            pick.classList.add('correct-p2');
+            sequences[1].push(revealedNum);
+            scores[1]++;
+            turnFoundCount++;
+            nextExpected++;
+            updateHUD();
+            updateSeqDisplay();
+            if (nextExpected > N) { botPlaying = false; endGame('complete'); return; }
+            setStatus(`🤖 Lucky! Bot found <strong>${revealedNum}</strong>! Looking for <strong>${nextExpected}</strong>...`);
+            await delay(750);
+          } else {
+            // Wrong – shake, flip all, switch to player
+            pick.classList.add('wrong');
+            setStatus(`🤖 Bot guessed wrong (got <strong>${revealedNum}</strong>, needed <strong>${target}</strong>). Your turn!`);
+            await delay(800);
+            pick.classList.remove('wrong');
+            botPlaying = false;
+            cellEls.forEach(c => c.classList.remove('flipped'));
+            switchTurn();
+            return;
+          }
+        }
+      }
+      botPlaying = false;
+    }
+
+    // ─── Win ─────────────────────────────────────────────────────────────────────
+    function endGame(reason) {
+      gameActive = false;
+      const p1Name = document.getElementById('hud-p1-name').textContent;
+      const p2Name = document.getElementById('hud-p2-name').textContent;
+      const ws = document.getElementById('win-screen');
+      const wt = document.getElementById('win-title');
+      const wsc = document.getElementById('win-scores');
+      ws.style.display = 'flex';
+
+      const winnerIdx = scores[0] > scores[1] ? 0 : scores[1] > scores[0] ? 1 : -1;
+      const names = [p1Name, p2Name];
+      wt.textContent = winnerIdx === -1 ? "It's a Tie! 🤝" : `${names[winnerIdx]} Wins! 🎉`;
+      wt.style.color = winnerIdx === 0 ? 'var(--p1)' : winnerIdx === 1 ? 'var(--p2)' : 'gold';
+      wsc.innerHTML = [0, 1].map(i => `
+    <div class="win-score-card ${winnerIdx === i ? 'winner' : ''}">
+      <div class="hud-label">${names[i]}</div>
+      <div class="win-score-num hud-val ${i === 0 ? 'p1' : 'p2'}">${scores[i]}</div>
+      <div class="hud-label">Numbers Found</div>
+    </div>`).join('');
+    }
+
+    // ─── HUD ─────────────────────────────────────────────────────────────────────
+    function updateHUD() {
+      document.getElementById('hud-p1-score').textContent = scores[0];
+      document.getElementById('hud-p2-score').textContent = scores[1];
+      const p1Name = document.getElementById('hud-p1-name').textContent;
+      const p2Name = document.getElementById('hud-p2-name').textContent;
+      const badge = document.getElementById('cur-badge');
+      badge.textContent = currentPlayer === 0 ? `${p1Name}'s Turn` : `${p2Name}'s Turn`;
+      badge.className = 'cur-player-badge ' + (currentPlayer === 0 ? 'p1' : 'p2');
+      document.getElementById('hud-p1').className = 'hud-card' + (currentPlayer === 0 ? ' active-p1' : '');
+      document.getElementById('hud-p2').className = 'hud-card' + (currentPlayer === 1 ? ' active-p2' : '');
+    }
+
+    function updateSeqDisplay() {
+      const el = document.getElementById('seq-display');
+      // Show last turn's accumulated sequence for current player
+      const seq = sequences[currentPlayer];
+      // Show only this turn's found numbers (last turnFoundCount items)
+      const thisTurn = seq.slice(seq.length - turnFoundCount);
+      let html = thisTurn.map(n => `<span class="seq-num">${n}</span>`).join('');
+      if (turnFoundCount > 0 && nextExpected <= N) {
+        html += `<span class="seq-num seq-next">→ ${nextExpected}?</span>`;
+      }
+      el.innerHTML = html || '<span style="color:var(--muted);font-size:.82rem">Find 1 to start the sequence!</span>';
+    }
+
+    function setStatus(msg) { document.getElementById('status-msg').innerHTML = msg; }
+
+    function showTurnBanner() {
+      const p1Name = document.getElementById('hud-p1-name').textContent;
+      const p2Name = document.getElementById('hud-p2-name').textContent;
+      const b = document.getElementById('turn-banner');
+      b.textContent = currentPlayer === 0 ? `🟠 ${p1Name}'s Turn!` : `🟣 ${p2Name}'s Turn!`;
+      b.className = 'turn-banner show ' + (currentPlayer === 0 ? 'p1' : 'p2');
+      setTimeout(() => b.classList.remove('show'), 1800);
+    }
+  </script>
+</body>
+
+</html>
