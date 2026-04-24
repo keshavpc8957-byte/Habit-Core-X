@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tools</title>
+    <title>Tools & Games</title>
+
     <style>
         * {
             margin: 0;
@@ -13,7 +14,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             padding: 2rem 1rem;
@@ -27,9 +28,31 @@
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             font-size: 2.5rem;
             font-weight: 300;
+        }
+
+        /* Toggle Buttons */
+        .toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .toggle button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #ddd;
+            font-weight: 500;
+        }
+
+        .toggle button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
 
         .tools-grid {
@@ -44,81 +67,55 @@
             border-radius: 16px;
             padding: 2rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
             position: relative;
-            overflow: hidden;
-        }
-
-        .tool-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
         }
 
         .tool-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .tool-name {
             font-size: 1.5rem;
             font-weight: 600;
-            color: #2c3e50;
             margin-bottom: 0.5rem;
         }
 
         .tool-description {
             color: #7f8c8d;
-            line-height: 1.6;
             margin-bottom: 1.5rem;
         }
 
         .tool-button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border: none;
-            padding: 12px 24px;
+            padding: 12px;
             border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            text-decoration: none;
-            display: inline-block;
             text-align: center;
+            display: block;
+            text-decoration: none;
         }
 
-        .tool-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .tools-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-                padding: 0;
-            }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Tools</h1>
-        <div class="tools-grid">
 
-            <!-- Copy this card to add more tools -->
+    <div class="container">
+        <h1>My Platform</h1>
+
+        <!-- Toggle -->
+        <div class="toggle">
+            <button id="toolsBtn" class="active">Tools</button>
+            <button id="gamesBtn">Games</button>
+        </div>
+
+        <!-- TOOLS SECTION -->
+        <div id="toolsSection" class="tools-grid">
+
             <div class="tool-card">
                 <h3 class="tool-name">MCQ Generator</h3>
                 <p class="tool-description">Generate all Type of MCQs and practice.</p>
@@ -130,20 +127,55 @@
                 <p class="tool-description">Build Your own website in a second.</p>
                 <a target="_blank" href="/pages/web builder/webHome.html" class="tool-button">Open Tool</a>
             </div>
+
             <div class="tool-card">
                 <h3 class="tool-name">MCQ Practice</h3>
-                <p class="tool-description">Practice MCQ questions </p>
+                <p class="tool-description">Practice MCQ questions</p>
                 <a target="_blank" href="answersheet.html" class="tool-button">Open Tool</a>
             </div>
+
             <div class="tool-card">
                 <h3 class="tool-name">UPI Shield AI</h3>
-                <p class="tool-description">AI-powered UPI fraud detection tool for Indian shopkeepers and small
-                    businesses. Analyze UPI IDs, invoices, and payment requests instantly.</p>
+                <p class="tool-description">AI-powered UPI fraud detection tool.</p>
                 <a target="_blank" href="/pages/Upi detecter/index.html" class="tool-button">Open Tool</a>
             </div>
 
         </div>
+
+        <!-- GAMES SECTION -->
+        <div id="gamesSection" class="tools-grid hidden">
+
+            <div class="tool-card">
+                <h3 class="tool-name">Memory Game</h3>
+                <p class="tool-description">Test your memory with sequence cards.</p>
+                <a target="_blank" href="Games/num_memory_game.html" class="tool-button">Play Game</a>
+            </div>
+
+        </div>
+
     </div>
+
+    <script>
+        const toolsBtn = document.getElementById("toolsBtn");
+        const gamesBtn = document.getElementById("gamesBtn");
+        const toolsSection = document.getElementById("toolsSection");
+        const gamesSection = document.getElementById("gamesSection");
+
+        toolsBtn.onclick = () => {
+            toolsSection.classList.remove("hidden");
+            gamesSection.classList.add("hidden");
+            toolsBtn.classList.add("active");
+            gamesBtn.classList.remove("active");
+        }
+
+        gamesBtn.onclick = () => {
+            gamesSection.classList.remove("hidden");
+            toolsSection.classList.add("hidden");
+            gamesBtn.classList.add("active");
+            toolsBtn.classList.remove("active");
+        }
+    </script>
+
 </body>
 
 </html>
